@@ -4,42 +4,39 @@ import {
   exportExcel
 } from './util/excel'
 import Citys from './util/city'
+import str from './data/str'
 import baike01 from './data/baike01.json'
 import './App.css';
 
 function App() {
   debugger
-  const city = Citys
 
   // excel数据
   const [list, setList] = useState([])
 
+
+
   const [header, ActioHeader] = useState([
     {
-      title: '编号',
-      dataIndex: 'id',
-      key: 'id',
+      title: '关键词',
+      dataIndex: 'key',
+      key: 'key',
       className: 'text-monospace',
     }, {
-      title: '用户名称',
-      dataIndex: 'username',
-      key: 'username',
+      title: '籍贯关键词',
+      dataIndex: 'value',
+      key: 'value',
     }, {
-      title: '用户年龄',
-      dataIndex: 'userage',
-      key: 'userage',
+      title: '摘要',
+      dataIndex: '摘要',
+      key: '摘要',
+    }, {
+      title: '页面地址',
+      dataIndex: 'url',
+      key: 'url',
     }
   ])
-  const [excelList, actionExcelList] = useState([{ id: 1, username: "leson", userage: 18 }, {
-    id: 2,
-    username: "lulu",
-    userage: 30
-  },
-  {
-    id: 3,
-    username: "beibei",
-    userage: 19
-  }])
+  const [resultList, setResultList] = useState([])
 
 
 
@@ -47,6 +44,42 @@ function App() {
     debugger
 
   }
+
+  // 查询籍贯的正则
+
+  const reg1 = /生于(\S*)/g
+  const reg2 = /祖籍(\S*)/g
+  const reg3 = /原籍(\S*)/g
+  const reg4 = /(\S*)人/g
+  // 先导出百结果数据
+
+  // const exportReault = () => {
+  //   const list = []
+  //   baike01.map((data, index) => {
+  //     let value = ''
+
+  //     const comment = data.摘要.split(/[，。]/)
+  //     comment.map((item) => {
+  //       const temp = item.match(reg1) || item.match(reg2) || item.match(reg3) || item.match(reg4)
+  //       if (temp && temp.length > 0) {
+  //         value = temp[0]
+  //       }
+
+  //     })
+
+  //     const resultItem = {
+  //       key: data.关键词 || index, value: value, 摘要: data.摘要 || index, url: data.页面网址 || index
+
+  //     }
+  //     list.push(resultItem)
+  //   })
+
+  //   // 遍历完成
+  //   setResultList(Array.from(new Set(list)))
+
+  //   // exportExcel(header, list, "提取结果.xlsx")
+  // }
+  // exportReault()
   return (
     <div className="App">
       <input type="file" accept=".xls,.xlsx" onChange={(e) => {
@@ -60,10 +93,10 @@ function App() {
       }} />
       <button onClick={
         () => {
-          exportExcel(header, excelList, "学生信息.xlsx")
+          exportExcel(header, str, "提取结果.xlsx")
         }
       }>导出excel数据</button>
-    </div>
+    </div >
   );
 }
 
