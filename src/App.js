@@ -80,14 +80,17 @@ function App() {
           }
         }
 
+        const resultData = valueData.match(/[0-9]/g)
+        if ((resultData && resultData.length > 0) || valueData.length === 1) {
+          valueData = ''
+        }
+
         const resultItem = {
           key: data.关键词 || index, value: valueData, 摘要: data.摘要 || index, url: data.页面网址 || index
 
         }
         list.push(resultItem)
-
       }
-
     })
     debugger
 
