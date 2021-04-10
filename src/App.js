@@ -9,10 +9,11 @@ import baike01 from './data/baike01.json'
 import './App.css';
 
 function App() {
-  debugger
 
   // excel数据
   const [list, setList] = useState([])
+
+  const cityData = Citys
 
 
 
@@ -53,32 +54,47 @@ function App() {
   const reg4 = /(\S*)人/g
   // 先导出百结果数据
 
-  // const exportReault = () => {
-  //   const list = []
-  //   baike01.map((data, index) => {
-  //     let value = ''
+  const exportReault = () => {
+    const list = []
+    baike01.map((data, index) => {
+      if (data.关键词 !== '') {
+        let valueData = ''
 
-  //     const comment = data.摘要.split(/[，。]/)
-  //     comment.map((item) => {
-  //       const temp = item.match(reg1) || item.match(reg2) || item.match(reg3) || item.match(reg4)
-  //       if (temp && temp.length > 0) {
-  //         value = temp[0]
-  //       }
+        const comment = data.摘要.split(/[，。]/)
 
-  //     })
+        for (let i = 0; i < comment.length; i++) {
+          let temp = comment[i].match(reg1) || comment[i].match(reg2) || comment[i].match(reg3) || comment[i].match(reg4)
+          if (temp && temp.length > 0) {
+            // 排除生于19**的情况
+            const isBirth = temp[0].match(/[0-9]/g)
+            if (isBirth && isBirth.length > 0) {
+              temp = comment[i].match(reg2) || comment[i].match(reg3) || comment[i].match(reg4)
+              if (temp && temp.length > 0) {
+                valueData = temp[0]
+                break
+              }
+            } else {
+              valueData = temp[0]
+              break
+            }
+          }
+        }
 
-  //     const resultItem = {
-  //       key: data.关键词 || index, value: value, 摘要: data.摘要 || index, url: data.页面网址 || index
+        const resultItem = {
+          key: data.关键词 || index, value: valueData, 摘要: data.摘要 || index, url: data.页面网址 || index
 
-  //     }
-  //     list.push(resultItem)
-  //   })
+        }
+        list.push(resultItem)
 
-  //   // 遍历完成
-  //   setResultList(Array.from(new Set(list)))
+      }
 
-  //   // exportExcel(header, list, "提取结果.xlsx")
-  // }
+    })
+    debugger
+
+    // 遍历完成
+    setResultList(Array.from(new Set(list)))
+
+  }
   // exportReault()
   return (
     <div className="App">
