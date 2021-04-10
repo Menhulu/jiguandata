@@ -4,8 +4,9 @@ import {
   exportExcel
 } from './util/excel'
 import Citys from './util/city'
-import str from './data/str'
+import baikeResult from './data/str'
 import baike01 from './data/baike01.json'
+import allResult from './data/result.json'
 import './App.css';
 
 function App() {
@@ -37,14 +38,51 @@ function App() {
       key: 'url',
     }
   ])
+
+
+  const [resultHeader, ActioResultHeader] = useState([
+    {
+      title: '证券代码',
+      dataIndex: '证券代码',
+      key: '证券代码',
+      className: 'text-monospace',
+    }, {
+      title: '公司名称',
+      dataIndex: '公司名称',
+      key: '公司名称',
+    }, {
+      title: '姓名',
+      dataIndex: '姓名',
+      key: '姓名',
+    }, {
+      title: '人员ID',
+      dataIndex: '人员ID',
+      key: '人员ID',
+    }, {
+      title: '职位',
+      dataIndex: '职位',
+      key: '职位',
+    },
+    {
+      title: '关键词',
+      dataIndex: 'key',
+      key: 'key',
+      className: 'text-monospace',
+    }, {
+      title: '籍贯关键词',
+      dataIndex: 'value',
+      key: 'value',
+    }, {
+      title: '摘要',
+      dataIndex: '摘要',
+      key: '摘要',
+    }, {
+      title: '页面地址',
+      dataIndex: 'url',
+      key: 'url',
+    }
+  ])
   const [resultList, setResultList] = useState([])
-
-
-
-  const dataHandler = (originData, baikeData) => {
-    debugger
-
-  }
 
   // 查询籍贯的正则
 
@@ -99,22 +137,46 @@ function App() {
 
   }
   // exportReault()
+
+
+  // 合并数据
+  const handleAllData = (originData, baikeResult) => {
+    debugger
+    originData.map((origin) => {
+      baikeResult.map((baike) => {
+        if (origin.姓名 === baike.key) {
+          Object.assign(origin, baike)
+        }
+      })
+
+    })
+    debugger
+    console.log(originData)
+
+  }
+
   return (
     <div className="App">
       <input type="file" accept=".xls,.xlsx" onChange={(e) => {
         importsExcel(e).then(function (data) {
+          debugger
           console.log(data);
-          setList(data);
-          dataHandler(data, baike01)
+          handleAllData(data, baikeResult)
         }, function (data) {
           console.log(data);
         })
       }} />
+      {/* <button onClick={
+        () => {
+          exportExcel(header, baikeResult, "提取结果.xlsx")
+        }
+      }>导出excel数据</button> */}
+
       <button onClick={
         () => {
-          exportExcel(header, str, "提取结果.xlsx")
+          exportExcel(resultHeader, allResult, "提取结果.xlsx")
         }
-      }>导出excel数据</button>
+      }>导出合并结果</button>
     </div >
   );
 }
